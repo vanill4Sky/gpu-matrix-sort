@@ -1,3 +1,0 @@
-﻿  gpu-matrix-sort.cpp
-C:\Users\Pawel\source\repos\gpu-matrix-sort\gpu-matrix-sort\gpu-matrix-sort.cpp(13,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-  gpu-matrix-sort.vcxproj -> C:\Users\Pawel\source\repos\gpu-matrix-sort\Debug\gpu-matrix-sort.exe
