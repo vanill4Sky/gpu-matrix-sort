@@ -4,31 +4,30 @@
 #include <iostream>
 #include <time.h>
 #include "matrix.h"
+#include "utils.h"
 #include "insert_sort.h"
 
 using namespace std;
 
 int main()
 {
-    srand(time(NULL));
+    gms::matrix<float> mat{ 2, 4 };
+    gms::fill_matrix_with_random(mat, -10.0f, 10.0f);
+    auto test{ mat(1, 3) };
 
-    int rows = 30;
-    int columns = 20;
+    //srand(time(NULL));
 
-    Matrix matrix = Matrix(rows, columns);
-    InsertSort sorter = InsertSort();
-    matrix.print();
-    cout << endl;
+    //int rows = 30;
+    //int columns = 20;
 
-    for (int i = 0; i < rows; i++)
-    {
-        sorter.insertSort(matrix.matrix[i], matrix.columns);
-    }
-    matrix.print();
+    //Matrix matrix = Matrix(rows, columns);
+    //InsertSort sorter = InsertSort();
+    //matrix.print();
+    //cout << endl;
 
+    //for (int i = 0; i < rows; i++)
+    //{
+    //    sorter.insertSort(matrix.matrix[i], matrix.columns);
+    //}
+    //matrix.print();
 }
-
-
-
-
-

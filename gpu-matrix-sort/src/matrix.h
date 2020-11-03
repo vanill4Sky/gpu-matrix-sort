@@ -1,22 +1,30 @@
 #pragma once
 
-class Matrix
+#include <vector>
+
+namespace gms
 {
-private:
-	// All private is used for printing matrix
-	int widthOfColumns;
-	int widthOfFirstColumn;
-	void setWidthOfFirstColumn(int rows);
-	void setWidthOfColumns(int columns, int max);
 
+template <typename T>
+class matrix
+{
 public:
-	int rows;					// 1. dimention of matrix
-	int columns;				// 2. dimention of matrix
-	int** matrix;
+	matrix(size_t rows, size_t cols);
 
-	// range of values in matrix is [min..max]; default is [0..9]
-	Matrix(int rows, int columns, int min = 0, int max = 9);
-	~Matrix();
-	void print();
+	T* data();
+	typename std::vector<T>::iterator begin();
+	typename std::vector<T>::iterator end();
+	T& operator()(size_t row, size_t col);
+	const T& operator()(size_t row, size_t col) const;
+	size_t rows() const;
+	size_t cols() const;
+
+private:
+	size_t m_rows;
+	size_t m_cols;
+	std::vector<T> m_data;
 };
 
+}
+
+#include "matrix.inl"

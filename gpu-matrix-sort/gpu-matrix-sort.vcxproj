@@ -18,6 +18,20 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\insert_sort.h" />
+    <ClInclude Include="src\matrix.h" />
+    <ClInclude Include="src\random.h" />
+    <ClInclude Include="src\utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\insert_sort.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\random.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\matrix.inl" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -138,17 +152,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="gpu-matrix-sort.cpp" />
-    <ClCompile Include="InsertSort.cpp" />
-    <ClCompile Include="Matrix.cpp" />
-    <ClCompile Include="Random.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="InsertSort.h" />
-    <ClInclude Include="Matrix.h" />
-    <ClInclude Include="Random.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
