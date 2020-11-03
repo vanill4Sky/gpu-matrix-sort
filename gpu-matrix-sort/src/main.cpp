@@ -3,8 +3,8 @@
 
 #include <iostream>
 #include <time.h>
-#include "Matrix.h"
-#include "InsertSort.h"
+#include "matrix.h"
+#include "insert_sort.h"
 
 using namespace std;
 
