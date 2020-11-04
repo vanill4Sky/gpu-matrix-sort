@@ -1,5 +1,5 @@
-#include "Matrix.h"
-#include "Random.h"
+#include "matrix.h"
+#include "random.h"
 #include <iostream>
 #include <iomanip>
 
