@@ -35,12 +35,12 @@
     <ClCompile Include="src\random.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\insert_sort.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\matrix.inl">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="src\insert_sort.inl">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>

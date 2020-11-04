@@ -1,5 +1,4 @@
 #include <cassert>
-#include "matrix.h"
 
 template<typename T>
 inline gms::matrix<T>::matrix(size_t rows, size_t cols)

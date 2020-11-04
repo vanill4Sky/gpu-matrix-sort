@@ -1,19 +1,21 @@
-// gpu-matrix-sort.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include <iostream>
-#include <time.h>
+#include <algorithm>
+
 #include "matrix.h"
 #include "utils.h"
 #include "insert_sort.h"
-
-using namespace std;
 
 int main()
 {
     gms::matrix<float> mat{ 2, 4 };
     gms::fill_matrix_with_random(mat, -10.0f, 10.0f);
-    auto test{ mat(1, 3) };
+
+    std::vector<int> v{ 3, 1, 5, 2, 9, -10 };
+    const auto compare = [](int a, int b) {
+        return a > b;
+    };
+    gms::insert_sort<int>(v.begin(), v.end(), compare);
+    std::copy(v.begin(), v.end(), std::ostream_iterator<int>{ std::cout, ", " });
 
     //srand(time(NULL));
 

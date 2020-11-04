@@ -25,11 +25,11 @@
     <ClInclude Include="src\utils.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\insert_sort.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\random.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="src\insert_sort.inl" />
     <None Include="src\matrix.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
