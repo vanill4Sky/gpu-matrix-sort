@@ -4,7 +4,7 @@ template<typename T>
 inline void gms::insert_sort(
 	const typename std::vector<T>::iterator first,
 	const typename std::vector<T>::iterator last,
-	const std::function<bool(T, T)>& compare)
+	const std::function<bool(const T&, const T&)>& compare)
 {
 	if (first == last)
 	{
@@ -22,5 +22,16 @@ inline void gms::insert_sort(
 			--prev;
 		}
 		*prev = key;
+	}
+}
+
+
+template<typename T, typename SortFunction, typename CompareFunction>
+void gms::sort_matrix(gms::matrix<T>& matrix, const SortFunction& sort, const CompareFunction& compare)
+{
+	for (size_t i{ 0 }; i < matrix.rows(); ++i)
+	{
+		auto [a, b] = matrix.row(i);
+		sort(a, b, compare);
 	}
 }

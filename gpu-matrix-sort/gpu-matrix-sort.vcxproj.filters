@@ -18,10 +18,10 @@
     <ClInclude Include="src\matrix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\insert_sort.h">
+    <ClInclude Include="src\utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\utils.h">
+    <ClInclude Include="src\sort.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -34,7 +34,7 @@
     <None Include="src\matrix.inl">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="src\insert_sort.inl">
+    <None Include="src\sort.inl">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>
