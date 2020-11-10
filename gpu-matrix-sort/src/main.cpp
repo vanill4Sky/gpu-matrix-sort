@@ -15,7 +15,7 @@ int main()
         return a > b;
     };
     gms::insert_sort<int>(v.begin(), v.end(), compare);
-    std::copy(v.begin(), v.end(), std::ostream_iterator<int>{ std::cout, ", " });
+    std::copy(v.begin(), v.end(), std::ostream_iterator<decltype(v)::value_type>{ std::cout, ", " });
 
     //srand(time(NULL));
 

@@ -21,12 +21,10 @@
   <ItemGroup>
     <ClInclude Include="src\insert_sort.h" />
     <ClInclude Include="src\matrix.h" />
-    <ClInclude Include="src\random.h" />
     <ClInclude Include="src\utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\random.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\insert_sort.inl" />
