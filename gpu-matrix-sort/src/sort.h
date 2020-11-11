@@ -11,6 +11,17 @@
 namespace gms
 {
 
+namespace order
+{
+	static const auto ascending = [](const auto a, const auto b) {
+		return a > b;
+	};
+
+	static const auto descending = [](const auto a, const auto b) {
+		return a < b;
+	};
+}
+
 /**
  * @brief Sorts the elements in the range [first, last). A sequence is sorted with respect to a compare function.
  * @tparam T 
@@ -41,6 +52,7 @@ void insert_sort(
 */
 template <typename T, typename SortFunction, typename CompareFunction>
 void sort_matrix(gms::matrix<T>& matrix, const SortFunction& sort, const CompareFunction& compare);
+
 }
 
 #include "sort.inl"
