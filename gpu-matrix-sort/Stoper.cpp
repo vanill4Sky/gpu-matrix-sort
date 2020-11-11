@@ -24,7 +24,7 @@ unsigned long long Stoper::getTime() {
 	using namespace std;
 	return sto - sta;
 }
-
+//ZWRACA WYNIK JAKO STRING MINUTY:SEKUNDY:MILISEKUNDY:NANOSEKUNDY
 string Stoper::getTimeString() {
 	string resoult;
 	unsigned long long temp = getTime();
