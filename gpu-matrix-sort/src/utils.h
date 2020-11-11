@@ -1,9 +1,11 @@
 #pragma once
 
 #include <algorithm>
+#include <cassert>
+#include <iostream>
+#include <iterator>
 #include <random>
 #include <type_traits>
-#include <cassert>
 
 #include "matrix.h"
 
@@ -21,6 +23,9 @@ namespace detail
 	template <typename DistributionType, typename T>
 	void fill_matrix_with_random_impl(gms::matrix<T>& matrix, T lower_bound, T upper_bound);
 }
+
+template <typename T>
+void print_matrix(gms::matrix<T>& matrix, std::string_view col_delim = ", ", std::string_view row_delim = "\n");
 
 }
 
@@ -48,4 +53,15 @@ void gms::detail::fill_matrix_with_random_impl(gms::matrix<T>& matrix, T lower_b
 	};
 
 	std::generate(matrix.begin(), matrix.end(), random_value_beetwen);
+}
+
+template<typename T>
+void gms::print_matrix(gms::matrix<T>& matrix, std::string_view col_delim, std::string_view row_delim)
+{
+	for (size_t i{ 0 }; i < matrix.rows(); ++i)
+	{
+		auto [a, b] = matrix.row(i);
+		std::copy(a, b, std::ostream_iterator<T>{ std::cout, col_delim.data() });
+		std::cout << row_delim;
+	}
 }

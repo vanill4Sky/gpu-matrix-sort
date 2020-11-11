@@ -1,4 +1,5 @@
 #include <cassert>
+#include "matrix.h"
 
 template<typename T>
 inline gms::matrix<T>::matrix(size_t rows, size_t cols)
@@ -42,6 +43,17 @@ inline const T& gms::matrix<T>::operator()(size_t row, size_t col) const
 	assert(col < m_cols);
 
 	return m_data[row * m_cols + col];
+}
+
+template<typename T>
+inline std::pair<typename std::vector<T>::iterator, typename std::vector<T>::iterator> gms::matrix<T>::row(size_t row)
+{
+	assert(row < m_rows);
+
+	const auto begin_offset{ row * m_cols };
+	const auto end_offset{ begin_offset + m_cols };
+
+	return { m_data.begin() + begin_offset, m_data.begin() + end_offset };
 }
 
 template<typename T>

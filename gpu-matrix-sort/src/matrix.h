@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <utility>
 
 namespace gms
 {
@@ -16,6 +17,7 @@ public:
 	typename std::vector<T>::iterator end();
 	T& operator()(size_t row, size_t col);
 	const T& operator()(size_t row, size_t col) const;
+	std::pair<typename std::vector<T>::iterator, typename std::vector<T>::iterator> row(size_t row);
 	size_t rows() const;
 	size_t cols() const;
 
