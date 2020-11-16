@@ -1,4 +1,6 @@
-__kernel void vecAdd(__global int *data, const unsigned int rows, const unsigned int cols)                   
+#pragma OPENCL EXTENSION cl_khr_fp64 : enable
+
+__kernel void matrix_insert_sort(__global double* data, const int rows, const int cols)
 {                                                                                            
     int id = get_global_id(0);                                
                                                                                   
@@ -7,7 +9,7 @@ __kernel void vecAdd(__global int *data, const unsigned int rows, const unsigned
 		int offset = id * cols;
 		for (int i = 1; i < cols; i++)
 		{
-			int key = data[offset + i];
+			double key = data[offset + i];
 			int j = i - 1;
 
 			while (j >= 0 && data[offset + j] > key)
