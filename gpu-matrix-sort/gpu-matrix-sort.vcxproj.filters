@@ -24,9 +24,15 @@
     <ClInclude Include="src\sort.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\gpu_sort_driver.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -38,6 +44,9 @@
       <Filter>Source Files</Filter>
     </None>
     <None Include="src\matrix_insert_sort.cl">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="src\gpu_sort_driver.inl">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>

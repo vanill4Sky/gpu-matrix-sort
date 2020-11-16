@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <CL/cl.hpp>
 #include <iostream>
 #include <iterator>
 #include <random>
@@ -26,6 +27,10 @@ namespace detail
 
 template <typename T>
 void print_matrix(gms::matrix<T>& matrix, std::string_view col_delim = ", ", std::string_view row_delim = "\n");
+
+/*https://stackoverflow.com/questions/24326432/convenient-way-to-show-opencl-error-codes*/
+std::string get_error_string(cl_int code);
+void check_error(cl_int result, std::string_view message = "");
 
 }
 
