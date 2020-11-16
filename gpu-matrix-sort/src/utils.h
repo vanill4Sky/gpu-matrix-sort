@@ -7,6 +7,7 @@
 #include <iterator>
 #include <random>
 #include <type_traits>
+#include <string_view>
 
 #include "matrix.h"
 
