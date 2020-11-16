@@ -27,6 +27,7 @@
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="src\matrix_insert_sort.cl" />
     <None Include="src\sort.inl" />
     <None Include="src\matrix.inl" />
   </ItemGroup>

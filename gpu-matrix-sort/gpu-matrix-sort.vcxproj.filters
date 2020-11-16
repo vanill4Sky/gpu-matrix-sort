@@ -37,5 +37,8 @@
     <None Include="src\sort.inl">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="src\matrix_insert_sort.cl">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
