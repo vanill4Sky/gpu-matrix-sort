@@ -20,7 +20,7 @@ inline void gms::gpu_sort_driver<T>::sort()
 }
 
 template<typename T>
-inline const gms::matrix<T>& gms::gpu_sort_driver<T>::matrix() const
+inline const gms::matrix<T>& gms::gpu_sort_driver<T>::get_sorted_matrix() const
 {
 	return m_matrix;
 }

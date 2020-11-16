@@ -17,7 +17,7 @@ public:
 	gpu_sort_driver& operator=(const gpu_sort_driver&) = delete;
 
 	void sort();
-	const gms::matrix<T>& matrix() const;
+	const gms::matrix<T>& get_sorted_matrix() const;
 
 private:
 	std::string load_kernel_file(std::string_view kernel_filename);
