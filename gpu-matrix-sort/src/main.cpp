@@ -112,8 +112,9 @@ void check_error(cl_int result, std::string_view message = "")
 
 int main()
 {
+    double upper_bound = 9.0;
 	gms::matrix<double> mat{ 100, 10};
-	gms::fill_matrix_with_random(mat, 0.0, 9.0);
+	gms::fill_matrix_with_random(mat, 0.0, upper_bound);
 
 	auto rows{ static_cast<int>(mat.rows()) };
 	auto cols{ static_cast<int>(mat.cols()) };
@@ -197,7 +198,7 @@ int main()
 	clReleaseCommandQueue(queue);
 	clReleaseContext(context);
 
-	gms::print_matrix(mat);
+	gms::print_matrix_fixed(mat, upper_bound);
 
 	return 0;
 }

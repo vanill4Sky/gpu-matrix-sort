@@ -6,6 +6,7 @@
 #include <iterator>
 #include <random>
 #include <type_traits>
+#include <iomanip>
 
 #include "matrix.h"
 
@@ -27,7 +28,13 @@ namespace detail
 template <typename T>
 void print_matrix(gms::matrix<T>& matrix, std::string_view col_delim = ", ", std::string_view row_delim = "\n");
 
+template <typename T>
+void print_matrix_fixed(gms::matrix<T>& matrix, int upper_bound);
+
+int getNumberOfDigit(long n);
 }
+
+
 
 template <typename T, typename std::enable_if_t<std::is_integral_v<T>>*>
 void gms::fill_matrix_with_random(gms::matrix<T>& matrix, T lower_bound, T upper_bound)
@@ -64,4 +71,41 @@ void gms::print_matrix(gms::matrix<T>& matrix, std::string_view col_delim, std::
 		std::copy(a, b, std::ostream_iterator<T>{ std::cout, col_delim.data() });
 		std::cout << row_delim;
 	}
+}
+
+template<typename T>
+void gms::print_matrix_fixed(gms::matrix<T>& matrix, int upper_bound)
+{
+	std::cout.setf(std::ios::fixed);
+
+	int rowsDigit = getNumberOfDigit(matrix.rows());
+	int colcDigit = getNumberOfDigit(upper_bound) + 7;
+
+	std::cout << std::setw((float)rowsDigit + 1) << "|";
+	for (int i = 0; i < matrix.cols(); i++)
+	{
+		std::cout << std::setw(colcDigit) << i << "|";
+	}
+	std::cout << std::endl;
+	for (int i = 0; i < matrix.rows(); i++)
+	{
+		std::cout << std::setw(rowsDigit) << i << "|";
+		for (int j = 0; j < matrix.cols(); j++)
+		{
+			std::cout << std::setw(colcDigit) << matrix.operator()(i, j) << " ";
+		}
+		std::cout << std::endl;
+	}
+	std::cout.unsetf(std::ios::fixed);
+}
+
+int gms::getNumberOfDigit(long n)
+{
+	int count = 0;
+	while (n != 0)
+	{
+		n = n / 10;
+		++count;
+	}
+	return count;
 }
