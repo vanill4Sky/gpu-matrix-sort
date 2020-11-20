@@ -82,3 +82,14 @@ void gms::check_error(cl_int result, std::string_view message)
         std::cerr << message << ": " << get_error_string(result) << '\n';
     }
 }
+
+int gms::detail::get_number_of_digit(size_t n)
+{
+    int count = 0;
+    while (n != 0)
+    {
+        n = n / 10;
+        ++count;
+    }
+    return count;
+}

@@ -1,6 +1,3 @@
-#include <iostream>
-
-
 #include "matrix.h"
 #include "utils.h"
 #include "sort.h"
@@ -14,7 +11,7 @@ int main()
 
 	gms::gpu_sort_driver gpu_sort_driver{ mat, "src/matrix_insert_sort.cl" };
 	gpu_sort_driver.sort();
-	gms::print_matrix<double>(gpu_sort_driver.get_matrix());
+	gms::print_matrix_fixed<double>(gpu_sort_driver.get_matrix(), 9);
 
 	return 0;
 }

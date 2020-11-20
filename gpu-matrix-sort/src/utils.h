@@ -35,7 +35,7 @@ std::string get_error_string(cl_int code);
 void check_error(cl_int result, std::string_view message = "");
 
 template <typename T>
-void print_matrix_fixed(gms::matrix<T>& matrix, int upper_bound);
+void print_matrix_fixed(const gms::matrix<T>& matrix, int upper_bound);
 
 namespace detail
 {
@@ -82,7 +82,7 @@ void gms::print_matrix(const gms::matrix<T>& matrix, std::string_view col_delim,
 }
 
 template<typename T>
-void gms::print_matrix_fixed(gms::matrix<T>& matrix, int upper_bound)
+void gms::print_matrix_fixed(const gms::matrix<T>& matrix, int upper_bound)
 {
 	using namespace std;
 
@@ -107,15 +107,4 @@ void gms::print_matrix_fixed(gms::matrix<T>& matrix, int upper_bound)
 		cout << endl;
 	}
 	cout.unsetf(ios::fixed);
-}
-
-int gms::detail::get_number_of_digit(size_t n)
-{
-	int count = 0;
-	while (n != 0)
-	{
-		n = n / 10;
-		++count;
-	}
-	return count;
 }
