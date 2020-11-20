@@ -8,6 +8,7 @@
 #include <random>
 #include <type_traits>
 #include <string_view>
+#include <iomanip>
 
 #include "matrix.h"
 
@@ -32,6 +33,14 @@ void print_matrix(const gms::matrix<T>& matrix, std::string_view col_delim = ", 
 /*https://stackoverflow.com/questions/24326432/convenient-way-to-show-opencl-error-codes*/
 std::string get_error_string(cl_int code);
 void check_error(cl_int result, std::string_view message = "");
+
+template <typename T>
+void print_matrix_fixed(gms::matrix<T>& matrix, int upper_bound);
+
+namespace detail
+{
+	int get_number_of_digit(size_t n);
+}
 
 }
 
@@ -70,4 +79,43 @@ void gms::print_matrix(const gms::matrix<T>& matrix, std::string_view col_delim,
 		std::copy(a, b, std::ostream_iterator<T>{ std::cout, col_delim.data() });
 		std::cout << row_delim;
 	}
+}
+
+template<typename T>
+void gms::print_matrix_fixed(gms::matrix<T>& matrix, int upper_bound)
+{
+	using namespace std;
+
+	cout.setf(ios::fixed);
+
+	int row_digits = gms::detail::get_number_of_digit(matrix.rows());
+	int col_digits = gms::detail::get_number_of_digit(upper_bound) + 7;
+
+	cout << setw(row_digits + 1) << "|";
+	for (int i = 0; i < matrix.cols(); i++)
+	{
+		cout << setw(col_digits) << i << "|";
+	}
+	cout << endl;
+	for (int i = 0; i < matrix.rows(); i++)
+	{
+		cout << setw(row_digits) << i << "|";
+		for (int j = 0; j < matrix.cols(); j++)
+		{
+			cout << setw(col_digits) << matrix(i, j) << " ";
+		}
+		cout << endl;
+	}
+	cout.unsetf(ios::fixed);
+}
+
+int gms::detail::get_number_of_digit(size_t n)
+{
+	int count = 0;
+	while (n != 0)
+	{
+		n = n / 10;
+		++count;
+	}
+	return count;
 }
