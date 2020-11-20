@@ -24,7 +24,7 @@
     <ClInclude Include="src\sort.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\gpu_sort_driver.hpp">
+    <ClInclude Include="src\gpu_sort_driver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

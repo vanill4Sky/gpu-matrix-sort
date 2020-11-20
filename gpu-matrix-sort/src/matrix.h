@@ -18,6 +18,7 @@ public:
 	T& operator()(size_t row, size_t col);
 	const T& operator()(size_t row, size_t col) const;
 	std::pair<typename std::vector<T>::iterator, typename std::vector<T>::iterator> row(size_t row);
+	std::pair<typename std::vector<T>::const_iterator, typename std::vector<T>::const_iterator > row(size_t row) const;
 	size_t rows() const;
 	size_t cols() const;
 

@@ -7,17 +7,17 @@
 namespace gms
 {
 
-template <typename T, typename U>
+template <typename T>
 class gpu_sort_driver
 {
 public:
-	gpu_sort_driver(gms::matrix<T> matrix, std::string_view kernel_filename, U rows, U cols);
+	gpu_sort_driver(gms::matrix<T> matrix, std::string_view kernel_filename);
 	~gpu_sort_driver();
 	gpu_sort_driver(const gpu_sort_driver&) = delete;
 	gpu_sort_driver& operator=(const gpu_sort_driver&) = delete;
 
 	void sort();
-	const gms::matrix<T>& get_sorted_matrix() const;
+	const gms::matrix<T>& get_matrix() const;
 
 private:
 	std::string load_kernel_file(std::string_view kernel_filename);
@@ -34,11 +34,6 @@ private:
 	size_t global_item_size;
 	cl_kernel kernel;
 	cl_mem matrix_buffer;
-
-	U m_rows;
-	U m_cols;
-	size_t bytes;
-
 };
 
 }

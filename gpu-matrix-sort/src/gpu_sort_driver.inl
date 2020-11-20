@@ -1,13 +1,15 @@
-#include "gpu_sort_driver.hpp"
+#include "gpu_sort_driver.h"
 
 #include <algorithm>
 #include <fstream>
 
-template<typename T, typename U>
-inline gms::gpu_sort_driver<T, U>::gpu_sort_driver(gms::matrix<T> matrix, std::string_view kernel_filename, U rows, U cols)
-	: m_matrix{ std::move(matrix)}, m_rows{ std::move(rows)}, m_cols{ std::move(cols) }
+template<typename T>
+inline gms::gpu_sort_driver<T>::gpu_sort_driver(gms::matrix<T> matrix, std::string_view kernel_filename)
+	: m_matrix{ std::move(matrix)}
 {
-	bytes = m_rows * m_cols * sizeof(double);
+	auto rows = static_cast<int>(m_matrix.rows());
+	auto cols = static_cast<int>(m_matrix.cols());
+	auto bytes = rows * cols * sizeof(double);
 
 	// Get platform and device information
 	platform_id = NULL;
@@ -41,8 +43,7 @@ inline gms::gpu_sort_driver<T, U>::gpu_sort_driver(gms::matrix<T> matrix, std::s
 	local_item_size = 64;
 
 	//Number of total work items
-	global_item_size = ceil(m_cols / (float)local_item_size)*local_item_size;
-
+	global_item_size = ceil(cols / (float)local_item_size) * local_item_size;
 
 	// Build the program
 	clBuildProgram(program, 0, NULL, NULL, NULL, NULL);
@@ -64,14 +65,13 @@ inline gms::gpu_sort_driver<T, U>::gpu_sort_driver(gms::matrix<T> matrix, std::s
 
 	// Set the arguments of the kernel
 	ret = clSetKernelArg(kernel, 0, sizeof(cl_mem), &matrix_buffer);
-	ret |= clSetKernelArg(kernel, 1, sizeof(decltype(m_rows)), &m_rows);
-	ret |= clSetKernelArg(kernel, 2, sizeof(decltype(m_cols)), &m_cols);
+	ret |= clSetKernelArg(kernel, 1, sizeof(decltype(rows)), &rows);
+	ret |= clSetKernelArg(kernel, 2, sizeof(decltype(cols)), &cols);
 	gms::check_error(ret);
-
 }
 
-template<typename T, typename U>
-inline gms::gpu_sort_driver<T, U>::~gpu_sort_driver()
+template<typename T>
+inline gms::gpu_sort_driver<T>::~gpu_sort_driver()
 {
 	//Clean up
 	clFlush(queue);
@@ -83,12 +83,10 @@ inline gms::gpu_sort_driver<T, U>::~gpu_sort_driver()
 	clReleaseKernel(kernel);
 	clReleaseCommandQueue(queue);
 	clReleaseContext(context);
-
-	gms::print_matrix(m_matrix);
 }
 
-template<typename T, typename U>
-inline void gms::gpu_sort_driver<T, U>::sort()
+template<typename T>
+inline void gms::gpu_sort_driver<T>::sort()
 {
 	//Execute the kernel over the entire range of the data set
 	ret = clEnqueueNDRangeKernel(queue, kernel, 1, NULL, &global_item_size, &local_item_size, 0, NULL, NULL);
@@ -97,17 +95,18 @@ inline void gms::gpu_sort_driver<T, U>::sort()
 	clFinish(queue);
 
 	//Read the results
+	auto bytes = m_matrix.rows() * m_matrix.cols() * sizeof(double);
 	clEnqueueReadBuffer(queue, matrix_buffer, CL_TRUE, 0, bytes, m_matrix.data(), 0, NULL, NULL);
 }
 
-template<typename T, typename U>
-inline const gms::matrix<T>& gms::gpu_sort_driver<T, U>::get_sorted_matrix() const
+template<typename T>
+inline const gms::matrix<T>& gms::gpu_sort_driver<T>::get_matrix() const
 {
 	return m_matrix;
 }
 
-template<typename T, typename U>
-inline std::string gms::gpu_sort_driver<T, U>::load_kernel_file(std::string_view kernel_filename)
+template<typename T>
+inline std::string gms::gpu_sort_driver<T>::load_kernel_file(std::string_view kernel_filename)
 {
 	std::ifstream is{ kernel_filename.data() };
 	std::string file_content;

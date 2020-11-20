@@ -27,7 +27,7 @@ namespace detail
 }
 
 template <typename T>
-void print_matrix(gms::matrix<T>& matrix, std::string_view col_delim = ", ", std::string_view row_delim = "\n");
+void print_matrix(const gms::matrix<T>& matrix, std::string_view col_delim = ", ", std::string_view row_delim = "\n");
 
 /*https://stackoverflow.com/questions/24326432/convenient-way-to-show-opencl-error-codes*/
 std::string get_error_string(cl_int code);
@@ -62,7 +62,7 @@ void gms::detail::fill_matrix_with_random_impl(gms::matrix<T>& matrix, T lower_b
 }
 
 template<typename T>
-void gms::print_matrix(gms::matrix<T>& matrix, std::string_view col_delim, std::string_view row_delim)
+void gms::print_matrix(const gms::matrix<T>& matrix, std::string_view col_delim, std::string_view row_delim)
 {
 	for (size_t i{ 0 }; i < matrix.rows(); ++i)
 	{

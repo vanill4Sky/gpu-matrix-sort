@@ -57,6 +57,17 @@ inline std::pair<typename std::vector<T>::iterator, typename std::vector<T>::ite
 }
 
 template<typename T>
+inline std::pair<typename std::vector<T>::const_iterator, typename std::vector<T>::const_iterator> gms::matrix<T>::row(size_t row) const
+{
+	assert(row < m_rows);
+
+	const auto begin_offset{ row * m_cols };
+	const auto end_offset{ begin_offset + m_cols };
+
+	return { m_data.begin() + begin_offset, m_data.begin() + end_offset };
+}
+
+template<typename T>
 inline size_t gms::matrix<T>::rows() const
 {
 	return m_rows;
