@@ -31,10 +31,12 @@ void print_matrix(gms::matrix<T>& matrix, std::string_view col_delim = ", ", std
 template <typename T>
 void print_matrix_fixed(gms::matrix<T>& matrix, int upper_bound);
 
-int getNumberOfDigit(long n);
+namespace detail
+{
+	int get_number_of_digit(size_t n);
 }
 
-
+}
 
 template <typename T, typename std::enable_if_t<std::is_integral_v<T>>*>
 void gms::fill_matrix_with_random(gms::matrix<T>& matrix, T lower_bound, T upper_bound)
@@ -76,30 +78,32 @@ void gms::print_matrix(gms::matrix<T>& matrix, std::string_view col_delim, std::
 template<typename T>
 void gms::print_matrix_fixed(gms::matrix<T>& matrix, int upper_bound)
 {
-	std::cout.setf(std::ios::fixed);
+	using namespace std;
 
-	int rowsDigit = getNumberOfDigit(matrix.rows());
-	int colcDigit = getNumberOfDigit(upper_bound) + 7;
+	cout.setf(ios::fixed);
 
-	std::cout << std::setw((float)rowsDigit + 1) << "|";
+	int row_digits = gms::detail::get_number_of_digit(matrix.rows());
+	int col_digits = gms::detail::get_number_of_digit(upper_bound) + 7;
+
+	cout << setw(row_digits + 1) << "|";
 	for (int i = 0; i < matrix.cols(); i++)
 	{
-		std::cout << std::setw(colcDigit) << i << "|";
+		cout << setw(col_digits) << i << "|";
 	}
-	std::cout << std::endl;
+	cout << endl;
 	for (int i = 0; i < matrix.rows(); i++)
 	{
-		std::cout << std::setw(rowsDigit) << i << "|";
+		cout << setw(row_digits) << i << "|";
 		for (int j = 0; j < matrix.cols(); j++)
 		{
-			std::cout << std::setw(colcDigit) << matrix.operator()(i, j) << " ";
+			cout << setw(col_digits) << matrix(i, j) << " ";
 		}
-		std::cout << std::endl;
+		cout << endl;
 	}
-	std::cout.unsetf(std::ios::fixed);
+	cout.unsetf(ios::fixed);
 }
 
-int gms::getNumberOfDigit(long n)
+int gms::detail::get_number_of_digit(size_t n)
 {
 	int count = 0;
 	while (n != 0)
