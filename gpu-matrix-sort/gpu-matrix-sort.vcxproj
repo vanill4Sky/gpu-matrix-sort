@@ -22,10 +22,12 @@
     <ClInclude Include="src\gpu_sort_driver.h" />
     <ClInclude Include="src\sort.h" />
     <ClInclude Include="src\matrix.h" />
+    <ClInclude Include="src\timer.h" />
     <ClInclude Include="src\utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\timer.cpp" />
     <ClCompile Include="src\utils.cpp" />
   </ItemGroup>
   <ItemGroup>
