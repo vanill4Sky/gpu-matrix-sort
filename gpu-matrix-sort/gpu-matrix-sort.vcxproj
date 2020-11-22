@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\cpu_sort_driver.h" />
     <ClInclude Include="src\gpu_sort_driver.h" />
     <ClInclude Include="src\sort.h" />
     <ClInclude Include="src\matrix.h" />
@@ -31,6 +32,7 @@
     <ClCompile Include="src\utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="src\cpu_sort_driver.inl" />
     <None Include="src\gpu_sort_driver.inl" />
     <None Include="src\matrix_insert_sort.cl" />
     <None Include="src\sort.inl" />

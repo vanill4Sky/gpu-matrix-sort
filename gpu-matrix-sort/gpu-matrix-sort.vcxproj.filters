@@ -30,6 +30,9 @@
     <ClInclude Include="src\timer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\cpu_sort_driver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -53,6 +56,9 @@
       <Filter>Source Files</Filter>
     </None>
     <None Include="src\gpu_sort_driver.inl">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="src\cpu_sort_driver.inl">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>
