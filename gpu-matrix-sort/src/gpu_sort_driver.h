@@ -7,6 +7,13 @@
 namespace gms
 {
 
+struct timing_info
+{
+	cl_ulong execution_time{ 0 };
+	cl_ulong read_time{ 0 };
+	cl_ulong write_time{ 0 };
+};
+
 template <typename T>
 class gpu_sort_driver
 {
@@ -18,9 +25,11 @@ public:
 
 	void sort();
 	const gms::matrix<T>& get_matrix() const;
+	gms::timing_info get_timing_info() const;
 
 private:
 	std::string load_kernel_file(std::string_view kernel_filename);
+	cl_ulong get_delta_time(cl_event event) const;
 
 	gms::matrix<T> m_matrix;
 
@@ -34,6 +43,9 @@ private:
 	size_t global_item_size;
 	cl_kernel kernel;
 	cl_mem matrix_buffer;
+
+	cl_event m_timing_event{ nullptr };
+	timing_info m_timing_info;
 };
 
 }
