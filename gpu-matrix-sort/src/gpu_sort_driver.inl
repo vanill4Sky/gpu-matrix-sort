@@ -29,7 +29,7 @@ inline gms::gpu_sort_driver<T>::gpu_sort_driver(gms::matrix<T>&& matrix, std::st
 	gms::check_error(ret, "clCreateContext");
 
 	// Create a command queue
-	queue = clCreateCommandQueue(context, device_id, 0, &ret);
+	queue = clCreateCommandQueue(context, device_id, CL_QUEUE_PROFILING_ENABLE, &ret);
 	gms::check_error(ret, "clCreateCommandQueue");
 
 	// Create a program from the kernel source
@@ -61,8 +61,13 @@ inline gms::gpu_sort_driver<T>::gpu_sort_driver(gms::matrix<T>&& matrix, std::st
 	matrix_buffer = clCreateBuffer(context, CL_MEM_READ_ONLY, bytes, NULL, NULL);
 
 	// Copy our data set into the input array in device memory
-	ret = clEnqueueWriteBuffer(queue, matrix_buffer, CL_TRUE, 0, bytes, m_matrix.data(), 0, NULL, NULL);
+	ret = clEnqueueWriteBuffer(queue, matrix_buffer, CL_TRUE, 0,
+		bytes, m_matrix.data(), 0, NULL, &m_timing_event);
 	gms::check_error(ret);
+	if (!ret)
+	{
+		m_timing_info.write_time = get_delta_time(m_timing_event);
+	}
 
 	// Set the arguments of the kernel
 	ret = clSetKernelArg(kernel, 0, sizeof(cl_mem), &matrix_buffer);
@@ -90,14 +95,21 @@ template<typename T>
 inline void gms::gpu_sort_driver<T>::sort()
 {
 	//Execute the kernel over the entire range of the data set
-	ret = clEnqueueNDRangeKernel(queue, kernel, 1, NULL, &global_item_size, &local_item_size, 0, NULL, NULL);
-
-	//Wait for the queue to finish
+	ret = clEnqueueNDRangeKernel(queue, kernel, 1, NULL, &global_item_size, &local_item_size, 0, NULL, &m_timing_event);
 	clFinish(queue);
+
+	if (!ret)
+	{
+		m_timing_info.execution_time = get_delta_time(m_timing_event);
+	}
 
 	//Read the results
 	auto bytes = m_matrix.rows() * m_matrix.cols() * sizeof(T);
-	clEnqueueReadBuffer(queue, matrix_buffer, CL_TRUE, 0, bytes, m_matrix.data(), 0, NULL, NULL);
+	clEnqueueReadBuffer(queue, matrix_buffer, CL_TRUE, 0, bytes, m_matrix.data(), 0, NULL, &m_timing_event);
+	if (!ret)
+	{
+		m_timing_info.read_time = get_delta_time(m_timing_event);
+	}
 }
 
 template<typename T>
@@ -125,4 +137,16 @@ inline std::string gms::gpu_sort_driver<T>::load_kernel_file(std::string_view ke
 	file_content.assign(std::istreambuf_iterator<char>(is), std::istreambuf_iterator<char>());
 
 	return file_content;
+}
+
+template<typename T>
+inline cl_ulong gms::gpu_sort_driver<T>::get_delta_time(cl_event event) const
+{
+	cl_ulong start_time, end_time;
+	clGetEventProfilingInfo(event, CL_PROFILING_COMMAND_START, 
+		sizeof(start_time), &start_time, nullptr);
+	clGetEventProfilingInfo(event, CL_PROFILING_COMMAND_END,
+		sizeof(start_time), &end_time, nullptr);
+
+	return end_time - start_time;
 }
