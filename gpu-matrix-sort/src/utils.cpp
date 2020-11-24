@@ -1,5 +1,7 @@
 #include "utils.h"
 
+#include <fstream>
+
 std::string gms::get_error_string(cl_int code)
 {
     switch (code) {
@@ -92,4 +94,13 @@ int gms::detail::get_number_of_digit(size_t n)
         ++count;
     }
     return count;
+}
+
+bool gms::csv_writer::save_to_file(std::string_view path)
+{
+    std::ofstream out{ path.data() };
+    out << m_ss.str();
+    m_ss.str("");
+
+    return out.good();
 }

@@ -5,7 +5,7 @@
 #include "sort.h"
 
 template<typename T>
-inline gms::cpu_sort_driver<T>::cpu_sort_driver(gms::matrix<T> matrix, unsigned int thread_count)
+inline gms::cpu_sort_driver<T>::cpu_sort_driver(gms::matrix<T>&& matrix, unsigned int thread_count)
 	: m_matrix{ std::move(matrix) }
 {
 	set_thread_count(thread_count);
@@ -39,6 +39,12 @@ inline unsigned int gms::cpu_sort_driver<T>::get_thread_count() const
 
 template<typename T>
 inline const gms::matrix<T>& gms::cpu_sort_driver<T>::get_matrix() const
+{
+	return m_matrix;
+}
+
+template<typename T>
+inline gms::matrix<T>& gms::cpu_sort_driver<T>::get_matrix()
 {
 	return m_matrix;
 }
@@ -79,4 +85,5 @@ inline void gms::cpu_sort_driver<T>::sort_routine()
 			gms::insert_sort<T>(begin, end, gms::order::ascending);
 		}
 	}
+	m_current_row = 0;
 }

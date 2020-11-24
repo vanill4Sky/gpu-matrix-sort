@@ -4,12 +4,13 @@
 #include <fstream>
 
 template<typename T>
-inline gms::gpu_sort_driver<T>::gpu_sort_driver(gms::matrix<T> matrix, std::string_view kernel_filename)
+inline gms::gpu_sort_driver<T>::gpu_sort_driver(gms::matrix<T>&& matrix, std::string_view kernel_filename, size_t work_group_size)
 	: m_matrix{ std::move(matrix)}
+	, local_item_size{ work_group_size }
 {
 	auto rows = static_cast<int>(m_matrix.rows());
 	auto cols = static_cast<int>(m_matrix.cols());
-	auto bytes = rows * cols * sizeof(double);
+	auto bytes = rows * cols * sizeof(T);
 
 	// Get platform and device information
 	platform_id = NULL;
@@ -40,7 +41,7 @@ inline gms::gpu_sort_driver<T>::gpu_sort_driver(gms::matrix<T> matrix, std::stri
 	gms::check_error(ret, "clCreateProgramWithSource");
 
 	//Number of work items in each local work group
-	local_item_size = 64;
+	//local_item_size = 64;
 
 	//Number of total work items
 	global_item_size = ceil(cols / (float)local_item_size) * local_item_size;
@@ -95,12 +96,18 @@ inline void gms::gpu_sort_driver<T>::sort()
 	clFinish(queue);
 
 	//Read the results
-	auto bytes = m_matrix.rows() * m_matrix.cols() * sizeof(double);
+	auto bytes = m_matrix.rows() * m_matrix.cols() * sizeof(T);
 	clEnqueueReadBuffer(queue, matrix_buffer, CL_TRUE, 0, bytes, m_matrix.data(), 0, NULL, NULL);
 }
 
 template<typename T>
 inline const gms::matrix<T>& gms::gpu_sort_driver<T>::get_matrix() const
+{
+	return m_matrix;
+}
+
+template<typename T>
+inline gms::matrix<T>& gms::gpu_sort_driver<T>::get_matrix()
 {
 	return m_matrix;
 }

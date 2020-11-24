@@ -1,4 +1,5 @@
 #include <cassert>
+#include "sort.h"
 
 template<typename T>
 inline void gms::insert_sort(
@@ -34,4 +35,23 @@ void gms::sort_matrix(gms::matrix<T>& matrix, const SortFunction& sort, const Co
 		auto [a, b] = matrix.row(i);
 		sort(a, b, compare);
 	}
+}
+
+template<typename T, typename CompareFunction>
+bool gms::validate_sorting(const gms::matrix<T>& matrix, const CompareFunction& compare)
+{
+	for (size_t i{ 0 }; i < matrix.rows(); ++i)
+	{
+		auto [a, b] = matrix.row(i);
+		
+		for (auto it{ a }; it != (b - 1); ++it)
+		{
+			if (compare(*it, *(it + 1)))
+			{
+				return false;
+			}
+		}
+	}
+
+	return true;
 }

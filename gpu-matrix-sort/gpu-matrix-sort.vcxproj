@@ -146,6 +146,9 @@
       <AdditionalLibraryDirectories>$(ProjectDir)dependencies/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>OpenCL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <Bscmake>
+      <AdditionalOptions>-c -t 12 -r 10 -d 10 %(AdditionalOptions)</AdditionalOptions>
+    </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -166,6 +169,9 @@
       <AdditionalLibraryDirectories>$(ProjectDir)dependencies/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>OpenCL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <Bscmake>
+      <AdditionalOptions>-c -t 12 -r 10 -d 10 %(AdditionalOptions)</AdditionalOptions>
+    </Bscmake>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
