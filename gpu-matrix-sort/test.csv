@@ -1,2 +1,2 @@
-iteracja;wiersze;kolumny;liczba rdzeni;czas sortowania [ns];
-0;10;10;12;6523700;
+iteracja;wiersze;kolumny;rozmiar grupy roboczej;czas zapisu bufora[ns];czas sortowania[ns];czas odczytu bufora[ns];
+0;1024;256;64;159904;7145472;158656;

@@ -2,11 +2,101 @@
 
 #include <algorithm>
 #include <fstream>
+#include <sstream>
 
 template<typename T>
 inline gms::gpu_sort_driver<T>::gpu_sort_driver(gms::matrix<T>&& matrix, std::string_view kernel_filename, size_t work_group_size)
 	: m_matrix{ std::move(matrix)}
-	, local_item_size{ work_group_size }
+{
+	set_work_group_size(work_group_size);
+	init_opencl(kernel_filename);
+}
+
+template<typename T>
+inline gms::gpu_sort_driver<T>::gpu_sort_driver(const gms::matrix<T>& matrix, std::string_view kernel_filename, size_t work_group_size)
+	: m_matrix{ matrix }
+{
+	set_work_group_size(work_group_size);
+	init_opencl(kernel_filename);
+}
+
+template<typename T>
+inline gms::gpu_sort_driver<T>::~gpu_sort_driver()
+{
+	//Clean up
+	clFlush(queue);
+	clFinish(queue);
+
+	clReleaseMemObject(matrix_buffer);
+
+	clReleaseProgram(program);
+	clReleaseKernel(kernel);
+	clReleaseCommandQueue(queue);
+	clReleaseContext(context);
+}
+
+template<typename T>
+inline void gms::gpu_sort_driver<T>::run()
+{
+	auto bytes = m_matrix.rows() * m_matrix.cols() * sizeof(T);
+
+	ret = clEnqueueWriteBuffer(queue, matrix_buffer, CL_TRUE, 0,bytes, m_matrix.data(), 0, NULL, &m_timing_event);
+	gms::check_error(ret);
+	if (!ret)
+	{
+		m_timing_info.write_time = get_delta_time(m_timing_event);
+	}
+
+	ret = clEnqueueNDRangeKernel(queue, kernel, 1, NULL, &global_item_size, &local_item_size, 0, NULL, &m_timing_event);
+	gms::check_error(ret);
+	clFinish(queue);
+	if (!ret)
+	{
+		m_timing_info.execution_time = get_delta_time(m_timing_event);
+	}
+
+	ret = clEnqueueReadBuffer(queue, matrix_buffer, CL_TRUE, 0, bytes, m_matrix.data(), 0, NULL, &m_timing_event);
+	gms::check_error(ret);
+	if (!ret)
+	{
+		m_timing_info.read_time = get_delta_time(m_timing_event);
+	}
+}
+
+template<typename T>
+inline const gms::matrix<T>& gms::gpu_sort_driver<T>::get_matrix() const
+{
+	return m_matrix;
+}
+
+template<typename T>
+inline gms::matrix<T>& gms::gpu_sort_driver<T>::get_matrix()
+{
+	return m_matrix;
+}
+
+template<typename T>
+inline gms::timing_info gms::gpu_sort_driver<T>::get_timing_info() const
+{
+	return m_timing_info;
+}
+
+template<typename T>
+inline void gms::gpu_sort_driver<T>::set_work_group_size(size_t wg_size)
+{
+	auto rows = static_cast<int>(m_matrix.rows());
+	local_item_size = wg_size;
+	global_item_size = ceil(rows / (float)local_item_size) * local_item_size;
+}
+
+template<typename T>
+inline void gms::gpu_sort_driver<T>::set_matrix(gms::matrix<T> matrix)
+{
+	m_matrix = std::move(matrix);
+}
+
+template<typename T>
+inline void gms::gpu_sort_driver<T>::init_opencl(std::string_view kernel_filename)
 {
 	auto rows = static_cast<int>(m_matrix.rows());
 	auto cols = static_cast<int>(m_matrix.cols());
@@ -40,14 +130,11 @@ inline gms::gpu_sort_driver<T>::gpu_sort_driver(gms::matrix<T>&& matrix, std::st
 	program = clCreateProgramWithSource(context, 1, kernel_source, NULL, &ret);
 	gms::check_error(ret, "clCreateProgramWithSource");
 
-	//Number of work items in each local work group
-	//local_item_size = 64;
-
-	//Number of total work items
-	global_item_size = ceil(cols / (float)local_item_size) * local_item_size;
-
 	// Build the program
-	clBuildProgram(program, 0, NULL, NULL, NULL, NULL);
+	std::stringstream ss;
+	ss << "-D WORK_GROUP_SIZE=" << local_item_size;
+	const auto build_options = ss.str();
+	clBuildProgram(program, 0, nullptr, build_options.data(), nullptr, nullptr);
 
 	char buff[2048];
 	clGetProgramBuildInfo(program, device_id, CL_PROGRAM_BUILD_LOG, sizeof(buff), buff, nullptr);
@@ -60,68 +147,11 @@ inline gms::gpu_sort_driver<T>::gpu_sort_driver(gms::matrix<T>&& matrix, std::st
 	// Create memory buffers on the device for each vector 
 	matrix_buffer = clCreateBuffer(context, CL_MEM_READ_ONLY, bytes, NULL, NULL);
 
-	// Copy our data set into the input array in device memory
-	ret = clEnqueueWriteBuffer(queue, matrix_buffer, CL_TRUE, 0,
-		bytes, m_matrix.data(), 0, NULL, &m_timing_event);
-	gms::check_error(ret);
-	if (!ret)
-	{
-		m_timing_info.write_time = get_delta_time(m_timing_event);
-	}
-
 	// Set the arguments of the kernel
 	ret = clSetKernelArg(kernel, 0, sizeof(cl_mem), &matrix_buffer);
 	ret |= clSetKernelArg(kernel, 1, sizeof(decltype(rows)), &rows);
 	ret |= clSetKernelArg(kernel, 2, sizeof(decltype(cols)), &cols);
 	gms::check_error(ret);
-}
-
-template<typename T>
-inline gms::gpu_sort_driver<T>::~gpu_sort_driver()
-{
-	//Clean up
-	clFlush(queue);
-	clFinish(queue);
-
-	clReleaseMemObject(matrix_buffer);
-
-	clReleaseProgram(program);
-	clReleaseKernel(kernel);
-	clReleaseCommandQueue(queue);
-	clReleaseContext(context);
-}
-
-template<typename T>
-inline void gms::gpu_sort_driver<T>::sort()
-{
-	//Execute the kernel over the entire range of the data set
-	ret = clEnqueueNDRangeKernel(queue, kernel, 1, NULL, &global_item_size, &local_item_size, 0, NULL, &m_timing_event);
-	clFinish(queue);
-
-	if (!ret)
-	{
-		m_timing_info.execution_time = get_delta_time(m_timing_event);
-	}
-
-	//Read the results
-	auto bytes = m_matrix.rows() * m_matrix.cols() * sizeof(T);
-	clEnqueueReadBuffer(queue, matrix_buffer, CL_TRUE, 0, bytes, m_matrix.data(), 0, NULL, &m_timing_event);
-	if (!ret)
-	{
-		m_timing_info.read_time = get_delta_time(m_timing_event);
-	}
-}
-
-template<typename T>
-inline const gms::matrix<T>& gms::gpu_sort_driver<T>::get_matrix() const
-{
-	return m_matrix;
-}
-
-template<typename T>
-inline gms::matrix<T>& gms::gpu_sort_driver<T>::get_matrix()
-{
-	return m_matrix;
 }
 
 template<typename T>

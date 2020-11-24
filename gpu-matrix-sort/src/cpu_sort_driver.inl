@@ -12,6 +12,13 @@ inline gms::cpu_sort_driver<T>::cpu_sort_driver(gms::matrix<T>&& matrix, unsigne
 }
 
 template<typename T>
+inline gms::cpu_sort_driver<T>::cpu_sort_driver(const gms::matrix<T>& matrix, unsigned int thread_count)
+	: m_matrix{ matrix }
+{
+	set_thread_count(thread_count);
+}
+
+template<typename T>
 inline void gms::cpu_sort_driver<T>::run()
 {
 	if (m_thread_count <= 1)

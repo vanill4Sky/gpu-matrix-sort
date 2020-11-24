@@ -35,6 +35,7 @@
     <None Include="src\cpu_sort_driver.inl" />
     <None Include="src\gpu_sort_driver.inl" />
     <None Include="src\matrix_insert_sort.cl" />
+    <None Include="src\matrix_insert_sort_local.cl" />
     <None Include="src\sort.inl" />
     <None Include="src\matrix.inl" />
   </ItemGroup>

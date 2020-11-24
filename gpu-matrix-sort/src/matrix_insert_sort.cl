@@ -1,6 +1,6 @@
 #pragma OPENCL EXTENSION cl_khr_fp64 : enable
 
-__kernel void matrix_insert_sort(__global double* data, const int rows, const int cols)
+__kernel void matrix_insert_sort(__global float* data, const int rows, const int cols)
 {                                                                                            
     int id = get_global_id(0);                                
                                                                                   
@@ -9,7 +9,7 @@ __kernel void matrix_insert_sort(__global double* data, const int rows, const in
 		int offset = id * cols;
 		for (int i = 1; i < cols; i++)
 		{
-			double key = data[offset + i];
+			float key = data[offset + i];
 			int j = i - 1;
 
 			while (j >= 0 && data[offset + j] > key)

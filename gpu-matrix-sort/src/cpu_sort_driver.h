@@ -13,6 +13,7 @@ class cpu_sort_driver
 {
 public:
 	cpu_sort_driver(gms::matrix<T>&& matrix, unsigned int thread_count);
+	cpu_sort_driver(const gms::matrix<T>& matrix, unsigned int thread_count);
 
 	void run();
 	void set_thread_count(unsigned int thread_count);
