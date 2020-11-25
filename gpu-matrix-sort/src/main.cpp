@@ -133,6 +133,7 @@ bool test_profiling(size_t rows, size_t cols, std::string_view kernel_name, size
 		fmt::print("Iteration {} of {}; work group size: {}\n", i + 1, iterations, wg_size);
 
 		gpu_sort_driver.set_matrix(m);
+		gpu_sort_driver.set_work_group_size(wg_size);
 		gpu_sort_driver.run();
 		const auto sort_time = gpu_sort_driver.get_timing_info();
 		csv.add_row(i, rows, cols, wg_size, sort_time.write_time, sort_time.execution_time, sort_time.read_time);
@@ -214,24 +215,6 @@ int main(int argc, char* argv[])
 	{
 		test_profiling(rows, cols, kernel_path, iterations, output_path);
 	}
-
-	//gms::timer timer;
-	//timer.start();
-
-	//gms::matrix<double> mat{ 100, 10};
-	//gms::fill_matrix_with_random(mat, 0.0, 9.0);
-
-	//// choose one method of sorting cpu/gpu
-	//gms::gpu_sort_driver gpu_sort_driver{ mat, "src/matrix_insert_sort.cl" };
-	//gpu_sort_driver.sort();
-
-	////gms::cpu_sort_driver cpu_sort_driver(mat, 6);
-	////cpu_sort_driver.run();
-
-	//gms::print_matrix_fixed<double>(gpu_sort_driver.get_matrix(), 9);
-
-	//timer.stop();
-	//std::cout << timer.get_time_as_string() << "\n";
 
 	return 0;
 }
