@@ -61,5 +61,8 @@
     <None Include="src\cpu_sort_driver.inl">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="src\matrix_insert_sort_local.cl">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

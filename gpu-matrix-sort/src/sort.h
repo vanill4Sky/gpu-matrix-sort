@@ -53,6 +53,9 @@ void insert_sort(
 template <typename T, typename SortFunction, typename CompareFunction>
 void sort_matrix(gms::matrix<T>& matrix, const SortFunction& sort, const CompareFunction& compare);
 
+template <typename T, typename CompareFunction>
+bool validate_sorting(const gms::matrix<T>& matrix, const CompareFunction& compare);
+
 }
 
 #include "sort.inl"

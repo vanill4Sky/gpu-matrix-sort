@@ -8,6 +8,7 @@
 #include <random>
 #include <type_traits>
 #include <string_view>
+#include <sstream>
 #include <iomanip>
 
 #include "matrix.h"
@@ -40,6 +41,33 @@ void print_matrix_fixed(const gms::matrix<T>& matrix, int upper_bound);
 namespace detail
 {
 	int get_number_of_digit(size_t n);
+}
+
+
+class csv_writer
+{
+public:
+	template<typename ...Args>
+	csv_writer(Args&&... args);
+	template<typename ...Args>
+	void add_row(Args&&... args);
+	bool save_to_file(std::string_view path);
+
+private:
+	std::stringstream m_ss;
+};
+
+template<typename ...Args>
+inline csv_writer::csv_writer(Args && ...args)
+{
+	add_row(std::forward<Args>(args)...);
+}
+
+template<typename ...Args>
+inline void csv_writer::add_row(Args && ...args)
+{
+	((m_ss << args << ';'), ...);
+	m_ss << '\n';
 }
 
 }
