@@ -130,13 +130,17 @@ bool test_profiling(size_t rows, size_t cols, std::string_view kernel_name, size
 	size_t wg_size{ 1 };
 	for (size_t i = 0; i < iterations; ++i)
 	{
-		fmt::print("Iteration {} of {}; work group size: {}\n", i + 1, iterations, wg_size);
+		for (size_t j = 0; j < iterations; ++j)
+		{
+			const auto it_id{ i * iterations + j };
+			fmt::print("Iteration {} of {}; work group size: {}\n", it_id + 1, iterations * iterations, wg_size);
 
-		gpu_sort_driver.set_matrix(m);
-		gpu_sort_driver.set_work_group_size(wg_size);
-		gpu_sort_driver.run();
-		const auto sort_time = gpu_sort_driver.get_timing_info();
-		csv.add_row(i, rows, cols, wg_size, sort_time.write_time, sort_time.execution_time, sort_time.read_time);
+			gpu_sort_driver.set_matrix(m);
+			gpu_sort_driver.set_work_group_size(wg_size);
+			gpu_sort_driver.run();
+			const auto sort_time = gpu_sort_driver.get_timing_info();
+			csv.add_row(i, rows, cols, wg_size, sort_time.write_time, sort_time.execution_time, sort_time.read_time);
+		}
 
 		wg_size *= 2;
 	}
